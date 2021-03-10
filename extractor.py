@@ -33,11 +33,10 @@ for extracted in args.src.rglob(f'*.{args.ext}'):
     if extracted.is_dir():
         continue
     final_path = args.dst / extracted.name
-    if final_path.exists():
-        count = 1
+    count = 0
+    while final_path.exists():
+        count += 1
         final_path = args.dst / f'{extracted.stem}_{count}.{args.ext}'
-        while final_path.exists():
-            count += 1
-            final_path = args.dst / f'{extracted.stem}_{count}.{args.ext}'
-    print(f'Copy {extracted} to {final_path}')
+    if args.verbose:
+        print(f'Copy {extracted} to {final_path}')
     shutil.copy(extracted, final_path)
